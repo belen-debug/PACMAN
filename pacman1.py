@@ -6,7 +6,8 @@ class Pacman:
         self.y = y  # Posición inicial en el eje Y
         self.velocidad = velocidad  # Velocidad de movimiento
         self.laberinto = laberinto  # Referencia al laberinto (muros)
-        self.tamano = 15 # Tamaño del personaje
+        self.tamano = 14 # Tamaño del personaje
+        self.direccion = "left"
         self.puntuacion = 0
         pyxel.load("assets/resources/assets.pyxres")  # Cargar recursos gráficos
 
@@ -68,12 +69,16 @@ class Pacman:
 
         if pyxel.btn(pyxel.KEY_LEFT):
             nuevo_x -= self.velocidad
+            self.direccion = "left"
         if pyxel.btn(pyxel.KEY_RIGHT):
             nuevo_x += self.velocidad
+            self.direccion = "right"
         if pyxel.btn(pyxel.KEY_UP):
             nuevo_y -= self.velocidad
+            self.direccion = "up"
         if pyxel.btn(pyxel.KEY_DOWN):
             nuevo_y += self.velocidad
+            self.direccion = "down"
 
         # Verificar colisiones antes de mover
         if self.puede_moverse(nuevo_x, self.y):  # Movimiento horizontal
@@ -82,6 +87,54 @@ class Pacman:
             self.y = nuevo_y
 
         self.recoge_punto()
+
+    def automovimiento(self):
+        nuevo_x, nuevo_y = self.x, self.y
+        if self.direccion == 'left':
+            nuevo_x -= self.velocidad
+        elif self.direccion == 'right':
+            nuevo_x += self.velocidad
+        elif self.direccion == 'up':
+            nuevo_y -= self.velocidad
+        elif self.direccion == 'down':
+            nuevo_y += self.velocidad
+
+        if self.puede_moverse(nuevo_x, nuevo_y):
+            self.x, self.y = nuevo_x, nuevo_y
+
+    """
+    # Función para moverse automáticamente
+    def automovimiento(self):
+
+        while self.puede_moverse(self.x, self.y):
+            self.x +=  1
+            self.y +=  1
+        
+        
+            
+    def update(self):
+        
+        nuevo_x, nuevo_y = self.x, self.y
+
+        # Movimiento según la dirección actual
+        if self.direccion == 'left':
+            nuevo_x -= self.velocidad
+        elif self.direccion == 'right':
+            nuevo_x += self.velocidad
+        elif self.direccion == 'up':
+            nuevo_y -= self.velocidad
+        elif self.direccion == 'down':
+            nuevo_y += self.velocidad
+
+        # Verificar si puede moverse a la nueva posición, si no puede, cambiar de dirección aleatoria
+        if not self.puede_moverse(nuevo_x, nuevo_y):
+            self.direccion = random.choice(['left', 'right', 'up', 'down'])
+
+        # Si puede moverse, actualizamos la posición
+        if self.puede_moverse(nuevo_x, nuevo_y):
+            self.x, self.y = nuevo_x, nuevo_y
+    """
+
 
     def draw(self):
         """Dibuja al personaje en pantalla"""

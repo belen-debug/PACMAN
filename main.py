@@ -48,6 +48,8 @@ def main():
 
     def update():
         nonlocal vidas
+
+        personaje.automovimiento() #Hace que pacman se mueva solo
         personaje.update()  # Actualiza a Pacman
         for fantasma in fantasmas:
             fantasma.update()
