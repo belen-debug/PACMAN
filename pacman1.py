@@ -6,7 +6,7 @@ class Pacman:
         self.y = y  # Posición inicial en el eje Y
         self.velocidad = velocidad  # Velocidad de movimiento
         self.laberinto = laberinto  # Referencia al laberinto (muros)
-        self.tamano = 8 # Tamaño del personaje
+        self.tamano = 15 # Tamaño del personaje
         self.puntuacion = 0
         pyxel.load("assets/resources/assets.pyxres")  # Cargar recursos gráficos
 
