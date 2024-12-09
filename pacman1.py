@@ -8,7 +8,7 @@ class Pacman:
         self.y = y  # Posición inicial en el eje Y
         self.velocidad = velocidad  # Velocidad de movimiento
         self.laberinto = laberinto  # Referencia al laberinto (muros)
-        self.tamano = 14  # Tamaño del personaje
+        self.tamano = 16  # Tamaño del personaje
         self.direccion = None
         self.direccion_pendiente = None
         self.puntuacion = 0
