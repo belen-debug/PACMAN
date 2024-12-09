@@ -1,14 +1,19 @@
-#PACMAN
+# PACMAN
 import pyxel
+
+
 class Pacman:
     def __init__(self, x, y, velocidad, laberinto):
         self.x = x  # Posición inicial en el eje X
         self.y = y  # Posición inicial en el eje Y
         self.velocidad = velocidad  # Velocidad de movimiento
         self.laberinto = laberinto  # Referencia al laberinto (muros)
-        self.tamano = 14 # Tamaño del personaje
-        self.direccion = "left"
+        self.tamano = 14  # Tamaño del personaje
+        self.direccion = None
+        self.direccion_pendiente = None
         self.puntuacion = 0
+        centro_x = self.x + 14
+        centro_y = self.y + 23
         pyxel.load("assets/resources/assets.pyxres")  # Cargar recursos gráficos
 
     def recoge_punto(self):
@@ -32,7 +37,8 @@ class Pacman:
         celda_inferior = (y + self.tamano - 1) // tamano_celda
 
         # Asegurarse de no salir de los límites de la matriz
-        if celda_izquierda < 0 or celda_superior < 0 or celda_derecha >= len(matriz[0]) or celda_inferior >= len(matriz):
+        if celda_izquierda < 0 or celda_superior < 0 or celda_derecha >= len(matriz[0]) or celda_inferior >= len(
+                matriz):
             return False
 
         # Verifica todas las celdas que ocupa el personaje
@@ -40,15 +46,15 @@ class Pacman:
             for columna in range(celda_izquierda, celda_derecha + 1):
                 if matriz[fila][columna] == 1:  # Si hay un muro
                     return False
-                elif matriz[fila][columna] == 2: # Si es un lugar para el teletransporte
+                elif matriz[fila][columna] == 2:  # Si es un lugar para el teletransporte
                     # Llamo a la función teletransportar
                     self.teletransportar()
                     return True
 
-
         return True
 
         # Creo una función teletransportar
+
     def teletransportar(self):
         tamano_celda = self.laberinto.tamano
 
@@ -62,12 +68,58 @@ class Pacman:
             # Se teletransporta al borde izquierdo
             self.x = 0
 
-
     def update(self):
-        """Actualizar la posición del personaje según las teclas presionadas"""
+        """Actualizar posición y dirección"""
+        # Detectar dirección solicitada
+        if pyxel.btn(pyxel.KEY_LEFT):
+            self.direccion_pendiente = "left"
+        elif pyxel.btn(pyxel.KEY_RIGHT):
+            self.direccion_pendiente = "right"
+        elif pyxel.btn(pyxel.KEY_UP):
+            self.direccion_pendiente = "up"
+        elif pyxel.btn(pyxel.KEY_DOWN):
+            self.direccion_pendiente = "down"
+
+        # Calcular posición para dirección pendiente
+        nuevo_x, nuevo_y = self.x, self.y
+        if self.direccion_pendiente == "left":
+            nuevo_x -= self.velocidad
+        elif self.direccion_pendiente == "right":
+            nuevo_x += self.velocidad
+        elif self.direccion_pendiente == "up":
+            nuevo_y -= self.velocidad
+        elif self.direccion_pendiente == "down":
+            nuevo_y += self.velocidad
+
+        # Cambiar dirección si es posible
+        if self.puede_moverse(nuevo_x, nuevo_y):
+            self.direccion = self.direccion_pendiente
+
+        # Calcular posición para dirección actual
+        nuevo_x, nuevo_y = self.x, self.y
+        if self.direccion == "left":
+            nuevo_x -= self.velocidad
+        elif self.direccion == "right":
+            nuevo_x += self.velocidad
+        elif self.direccion == "up":
+            nuevo_y -= self.velocidad
+        elif self.direccion == "down":
+            nuevo_y += self.velocidad
+
+        # Mover si es posible
+        if self.puede_moverse(nuevo_x, nuevo_y):
+            self.x, self.y = nuevo_x, nuevo_y
+
+        self.recoge_punto()
+    """def update(self):
+       
         nuevo_x, nuevo_y = self.x, self.y
 
+        # Se guarda una nueva dirección intento del jugador
+
+
         if pyxel.btn(pyxel.KEY_LEFT):
+            nueva_direccion = "left"
             nuevo_x -= self.velocidad
             self.direccion = "left"
         if pyxel.btn(pyxel.KEY_RIGHT):
@@ -86,8 +138,8 @@ class Pacman:
         if self.puede_moverse(self.x, nuevo_y):  # Movimiento vertical
             self.y = nuevo_y
 
-        self.recoge_punto()
 
+        self.recoge_punto()"""
     def automovimiento(self):
         nuevo_x, nuevo_y = self.x, self.y
         if self.direccion == 'left':
@@ -102,6 +154,9 @@ class Pacman:
         if self.puede_moverse(nuevo_x, nuevo_y):
             self.x, self.y = nuevo_x, nuevo_y
 
+
+
+
     """
     # Función para moverse automáticamente
     def automovimiento(self):
@@ -109,11 +164,11 @@ class Pacman:
         while self.puede_moverse(self.x, self.y):
             self.x +=  1
             self.y +=  1
-        
-        
-            
+
+
+
     def update(self):
-        
+
         nuevo_x, nuevo_y = self.x, self.y
 
         # Movimiento según la dirección actual
@@ -135,10 +190,8 @@ class Pacman:
             self.x, self.y = nuevo_x, nuevo_y
     """
 
-
     def draw(self):
         """Dibuja al personaje en pantalla"""
         pyxel.blt(self.x, self.y, 0, 16, 0, self.tamano, self.tamano, 0)
         pyxel.text(5, 5, f"Puntuacion: {self.puntuacion}", 2)
-
 

@@ -19,7 +19,7 @@ def main():
     pyxel.init(256, 256)  # Inicializa la pantalla
     pyxel.load("assets/resources/assets.pyxres")  # Cargar recursos gráficos
     laberinto = Muros(16)  # Crea el laberinto
-    personaje = Pacman(16, 16, 2, laberinto)  # Crea al personaje Pacman
+    personaje = Pacman(16, 16, 1, laberinto)  # Crea al personaje Pacman
     fantasmas = [
        Fantasma(110, 110, 2.5, laberinto),  # Fantasma rojo
        Fantasma(120, 120, 3, laberinto),  # Fantasma rosado

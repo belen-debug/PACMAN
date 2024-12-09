@@ -2,6 +2,7 @@
 import pyxel
 import random
 
+
 class Fantasma:
     def __init__(self, x, y, sprite, laberinto):
         self.x = x  # Posición X
@@ -32,6 +33,10 @@ class Fantasma:
             for columna in range(celda_izquierda, celda_derecha + 1):
                 if matriz[fila][columna] == 1:  # Si hay un muro
                     return False
+                if matriz[fila][columna] == 2:  # Si es una zona de teletransporte
+                    # Llamo a la función teletransportar
+                    self.teletransportar()
+                    return True
 
         return True
 
