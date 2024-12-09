@@ -12,8 +12,6 @@ class Pacman:
         self.direccion = None
         self.direccion_pendiente = None
         self.puntuacion = 0
-        centro_x = self.x + 14
-        centro_y = self.y + 23
         pyxel.load("assets/resources/assets.pyxres")  # Cargar recursos gráficos
 
     def recoge_punto(self):
@@ -36,10 +34,7 @@ class Pacman:
         celda_superior = y // tamano_celda
         celda_inferior = (y + self.tamano - 1) // tamano_celda
 
-        # Asegurarse de no salir de los límites de la matriz
-        if celda_izquierda < 0 or celda_superior < 0 or celda_derecha >= len(matriz[0]) or celda_inferior >= len(
-                matriz):
-            return False
+
 
         # Verifica todas las celdas que ocupa el personaje
         for fila in range(celda_superior, celda_inferior + 1):
@@ -50,6 +45,12 @@ class Pacman:
                     # Llamo a la función teletransportar
                     self.teletransportar()
                     return True
+
+        # Asegurarse de no salir de los límites de la matriz
+        if celda_izquierda < 0 or celda_superior < 0 or celda_derecha >= len(
+                matriz[0]) or celda_inferior >= len(
+                matriz):
+            return False
 
         return True
 
