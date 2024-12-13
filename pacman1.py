@@ -12,6 +12,8 @@ class Pacman:
         self.direccion = None
         self.direccion_pendiente = None
         self.puntuacion = 0
+        self.pildora = 0 # Nº pildoras comidas
+        self.pildora_comida = False
         pyxel.load("assets/resources/assets.pyxres")  # Cargar recursos gráficos
 
     def recoge_punto(self):
@@ -19,9 +21,32 @@ class Pacman:
         for punto in self.laberinto.puntos:
             px, py = punto
             # Detectar colisión (distancia entre Pacman y el punto)
-            if abs(self.x + self.tamano // 2 - px) < 4 and abs(self.y + self.tamano // 2 - py) < 4:
+            if abs(self.x + self.tamano // 2 - px) <= 4 and abs(self.y + self.tamano // 2 - py) <= 4:
                 self.laberinto.puntos.remove(punto)  # Eliminar el punto
                 self.puntuacion += 10  # Aumentar el puntaje
+
+    def come_pildora(self):
+
+        for pildora in self.laberinto.pildoras:
+            px, py = pildora
+            centro_x_pacman = self.x + self.tamano // 2
+            centro_y_pacman = self.y + self.tamano // 2
+            distancia_max = self.tamano // 2 + 4 # La distancia máxima
+
+            # Detectar colisión (distancia entre Pacman y la píldora)
+            if abs(centro_x_pacman - px) < distancia_max and abs(centro_y_pacman - py) < distancia_max:
+                self.laberinto.pildoras.remove(pildora)  # Eliminar el punto
+                self.puntuacion += 50 # Aumentar el puntaje
+                # Aquí se debería empezar a ejecutar la funcion de comer fantasmas
+                # self.modo_pildora()
+                self.pildora_comida = True
+
+    def modo_pildora(self):
+        if self.pildora_comida == True:
+            if
+
+
+
 
     def puede_moverse(self, x, y):
         """Verifica si el personaje puede moverse a las coordenadas dadas"""
@@ -112,35 +137,8 @@ class Pacman:
             self.x, self.y = nuevo_x, nuevo_y
 
         self.recoge_punto()
-    """def update(self):
-       
-        nuevo_x, nuevo_y = self.x, self.y
+        self.come_pildora()
 
-        # Se guarda una nueva dirección intento del jugador
-
-
-        if pyxel.btn(pyxel.KEY_LEFT):
-            nueva_direccion = "left"
-            nuevo_x -= self.velocidad
-            self.direccion = "left"
-        if pyxel.btn(pyxel.KEY_RIGHT):
-            nuevo_x += self.velocidad
-            self.direccion = "right"
-        if pyxel.btn(pyxel.KEY_UP):
-            nuevo_y -= self.velocidad
-            self.direccion = "up"
-        if pyxel.btn(pyxel.KEY_DOWN):
-            nuevo_y += self.velocidad
-            self.direccion = "down"
-
-        # Verificar colisiones antes de mover
-        if self.puede_moverse(nuevo_x, self.y):  # Movimiento horizontal
-            self.x = nuevo_x
-        if self.puede_moverse(self.x, nuevo_y):  # Movimiento vertical
-            self.y = nuevo_y
-
-
-        self.recoge_punto()"""
     def automovimiento(self):
         nuevo_x, nuevo_y = self.x, self.y
         if self.direccion == 'left':
@@ -158,41 +156,15 @@ class Pacman:
 
 
 
-    """
-    # Función para moverse automáticamente
-    def automovimiento(self):
-
-        while self.puede_moverse(self.x, self.y):
-            self.x +=  1
-            self.y +=  1
-
-
-
-    def update(self):
-
-        nuevo_x, nuevo_y = self.x, self.y
-
-        # Movimiento según la dirección actual
-        if self.direccion == 'left':
-            nuevo_x -= self.velocidad
-        elif self.direccion == 'right':
-            nuevo_x += self.velocidad
-        elif self.direccion == 'up':
-            nuevo_y -= self.velocidad
-        elif self.direccion == 'down':
-            nuevo_y += self.velocidad
-
-        # Verificar si puede moverse a la nueva posición, si no puede, cambiar de dirección aleatoria
-        if not self.puede_moverse(nuevo_x, nuevo_y):
-            self.direccion = random.choice(['left', 'right', 'up', 'down'])
-
-        # Si puede moverse, actualizamos la posición
-        if self.puede_moverse(nuevo_x, nuevo_y):
-            self.x, self.y = nuevo_x, nuevo_y
-    """
 
     def draw(self):
         """Dibuja al personaje en pantalla"""
         pyxel.blt(self.x, self.y, 0, 16, 0, self.tamano, self.tamano, 0)
         pyxel.text(5, 5, f"Puntuacion: {self.puntuacion}", 2)
+
+
+
+
+
+
 

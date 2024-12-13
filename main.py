@@ -1,8 +1,10 @@
 # MAIN
+#Importamos al programa tanto la libreria de pyxel como las clases del juego
 import pyxel
 from pacman1 import Pacman
 from muros import Muros
 from fantasma import Fantasma
+
 
 def crear_fantasmas():
     # Coordenadas del centro del laberinto (ajustar según tamaño del laberinto)
@@ -19,18 +21,18 @@ def main():
     pyxel.init(256, 256)  # Inicializa la pantalla
     pyxel.load("assets/resources/assets.pyxres")  # Cargar recursos gráficos
     laberinto = Muros(16)  # Crea el laberinto
-    personaje = Pacman(16, 16, 1, laberinto)  # Crea al personaje Pacman
+    personaje = Pacman(128, 16, 1, laberinto)  # Crea al personaje Pacman
     fantasmas = [
-       Fantasma(110, 110, 2.5, laberinto),  # Fantasma rojo
-       Fantasma(120, 120, 3, laberinto),  # Fantasma rosado
-       Fantasma(130, 130, 2, laberinto),  # Fantasma marrón
-       Fantasma(140, 140, 1.5, laberinto),  # Fantasma azul
+       Fantasma(110, 110, 2.5, laberinto, personaje),  # Fantasma rojo
+       Fantasma(120, 120, 3, laberinto, personaje),  # Fantasma rosado
+       Fantasma(130, 130, 2, laberinto, personaje),  # Fantasma marrón
+       Fantasma(140, 140, 1.5, laberinto, personaje),  # Fantasma azul
     ]
     vidas = 3 
 
     def reiniciar_posiciones():
         """Reinicia las posiciones de Pacman y los fantasmas"""
-        personaje.x, personaje.y = 16, 16
+        personaje.x, personaje.y = 128, 16
         fantasmas[0].x, fantasmas[0].y = 110, 110
         fantasmas[1].x, fantasmas[1].y = 120, 120
         fantasmas[2].x, fantasmas[2].y = 130, 130
@@ -44,6 +46,7 @@ def main():
                 and abs(personaje.y - fantasma.y) < personaje.tamano
             ):
                 return True
+
         return False
 
     def update():
@@ -55,7 +58,12 @@ def main():
             fantasma.update()
 
         # Detectar colisión entre Pacman y fantasmas
-        if detectar_colision():
+        # Si detecta colisión y esta el modo pildora y el fantasma no está muerto
+        if detectar_colision() and modo_pildora():
+
+
+        # Si solo detecta colisión
+        elif detectar_colision():
             vidas -= 1  # Reduce las vidas en 1
             if vidas > 0:
                 reiniciar_posiciones()  # Reinicia las posiciones de los personajes

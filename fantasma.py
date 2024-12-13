@@ -1,10 +1,10 @@
 #FANTASMA"
 import pyxel
 import random
-
+from pacman1 import Pacman
 
 class Fantasma:
-    def __init__(self, x, y, sprite, laberinto):
+    def __init__(self, x, y, sprite, laberinto, target):
         self.x = x  # Posición X
         self.y = y  # Posición Y
         self.sprite = sprite  # Sprite del fantasma (índice para la imagen vertical)
@@ -12,6 +12,7 @@ class Fantasma:
         self.laberinto = laberinto  # Referencia al laberinto
         self.direccion = random.choice(['left', 'right', 'up', 'down'])  # Dirección inicial aleatoria
         self.velocidad = 2  # Velocidad de movimiento del fantasma (puedes ajustar esto)
+        self.target = target # Hace referencia a pacman
 
     def puede_moverse(self, x, y):
         """Verifica si el fantasma puede moverse a las coordenadas dadas"""
@@ -40,6 +41,11 @@ class Fantasma:
 
         return True
 
+    def distancia_corta(self,x1,y1,x2,y2):
+        #Calcula la distancia entre dos puntos
+        return abs(x1 - x2) + abs(y1 - y2)
+
+
     def update(self):
         """Actualizar la posición del fantasma con movimiento aleatorio y evitando paredes"""
         nuevo_x, nuevo_y = self.x, self.y
@@ -61,6 +67,18 @@ class Fantasma:
         # Si puede moverse, actualizamos la posición
         if self.puede_moverse(nuevo_x, nuevo_y):
             self.x, self.y = nuevo_x, nuevo_y
+
+    """ Vamos a definir el movimiento del fantasma Blinky, el fantasma rojo 
+    que persigue directamente a Pac-man. Gira siempre que puede si es ventajoso en su persecución de Pacman. """
+
+    """
+    def movimiento_blinky(self):
+        if self.puede_moverse():
+            self.
+    """
+
+    def nueva_direccion_fantasma(self):
+        self.direccion = math.copysign(self.velocidad*0.5, self.x - Pacman.x)
 
     def draw(self):
         """Dibuja el fantasma en pantalla usando su sprite (suponiendo que están en una fila vertical)"""
