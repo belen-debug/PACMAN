@@ -70,7 +70,7 @@ def main():
             if time.time() - personaje.inicio_pildora > constants.DURACION_PILDORA:
                 personaje.pildora_comida = False
                 fantasmas_muertos.clear()
-                quitar_modo_escape()
+                quitar_modo_escape()4
 
         fantasma_colisionado = detectar_colision() # Para detectar con qué fantasma ha colisionado
 
