@@ -22,7 +22,9 @@ def main():
        Fantasma(140, 140, 1.5, laberinto, personaje),
     ]
     vidas = 3
-    tiempo_modo_pildora = 0 # Este es el tiempo restante en el modo pildora medido en FPS
+
+
+    fantasmas_muertos = []
 
     def reiniciar_posiciones():
         """Reinicia las posiciones de Pacman y los fantasmas"""
@@ -43,27 +45,32 @@ def main():
                 return fantasma
         return None
 
-    """ Este es el modo en el que si pacman ha comido una pildora entonces, se activa este modo en el que pacman puede
-    a los fantasmas mientras estos escapan de él. Los fantasmas cambian de color y cuando se los come reinicia su posición a una (jaula) y vuelven a ser fantasmas normales.
+    """ Este es el modo en el que si pacman ha comido una pildora entonces, se activa este modo en 
+    el que pacman puede a los fantasmas mientras estos escapan de él. Los fantasmas cambian de color
+    y cuando se los come reinicia su posición a una (jaula) y vuelven a ser fantasmas normales.
     El modo dura 5s """
 
 
     def update():
-        nonlocal vidas, tiempo_modo_pildora
+        nonlocal vidas
 
         personaje.automovimiento() #Hace que pacman se mueva solo
         personaje.update()  # Actualiza a Pacman
         for fantasma in fantasmas:
-            """ Si es verdad que el fantasma ha comido una pildora, entonces el fantasma escape del personaje"""
-            if personaje.pildora_comida:
+            """ Si es verdad que el pacman ha comido una pildora, entonces el fantasma escape del personaje"""
+            if personaje.pildora_comida and fantasma not in fantasmas_muertos:
                 fantasma.escapar(personaje.x,personaje.y)
+                fantasma.modo_escape = True
+
             else:
                 fantasma.update()  # Movimiento normal
 
         if personaje.pildora_comida:
-            constants.inicio_pildora = time.time()
-            if time.time() - constants.inicio_pildora > constants.duracion_pildora:
+            print(time.time() - personaje.inicio_pildora)
+            if time.time() - personaje.inicio_pildora > constants.DURACION_PILDORA:
                 personaje.pildora_comida = False
+                fantasmas_muertos.clear()
+                quitar_modo_escape()
 
         fantasma_colisionado = detectar_colision() # Para detectar con qué fantasma ha colisionado
 
@@ -74,20 +81,28 @@ def main():
              reinicia la posición del fantasma con el que ha colisionado"""
 
 
-            if personaje.pildora_comida:
+            if personaje.pildora_comida and fantasma_colisionado not in fantasmas_muertos:
                 fantasma_colisionado.x, fantasma_colisionado.y = 110, 110
-                fantasma_colisionado = False
+                fantasmas_muertos.append(fantasma_colisionado)
+                fantasma_colisionado.modo_escape = False
 
             #elif not pildora_comida:
             else:
                 vidas -= 1  # Reduce las vidas en 1
-                fantasma_colisionado.modo_escape = False
+                quitar_modo_escape()
+                fantasmas_muertos.clear()
 
-
+                personaje.pildora_comida = False
                 if vidas > 0:
                     reiniciar_posiciones()  # Reinicia las posiciones de los personajes
                 else:
                     pyxel.quit()  # Cierra el juego si las vidas llegan a 0
+
+    def quitar_modo_escape():
+        for fantasma in fantasmas:
+            fantasma.modo_escape = False
+
+
 
 
 
@@ -103,10 +118,7 @@ def main():
         pyxel.rect (20, 240, 64, 16, 10)
         pyxel.text(25, 244, f"Vidas: {vidas}",1)
 
-        # Enseña el tiempo que queda
-        if tiempo_modo_pildora > 0:
-            tiempo_restante = tiempo_modo_pildora // 30  # Convertir fotogramas a segundos
-            pyxel.text(170, 5, f"Modo Pildora: {tiempo_restante}s", 8)
+
 
 
     pyxel.run(update, draw)  # Corre el bucle principal

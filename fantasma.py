@@ -43,51 +43,8 @@ class Fantasma:
                     return False
 
         return True
-    """
-    def mover_hacia(self, objetivo_x, objetivo_y):
-        # Calculamos la dirección en base a la posición del objetivo y la del fantasma
-        direccion_x = objetivo_x - self.x
-        direccion_y = objetivo_y - self.y
 
-        # Intentar moverse horizontalmente o verticalmente dependiendo de la dirección preferida
-        if abs(direccion_x) > abs(direccion_y):  # Si la diferencia horizontal es mayor que la vertical
-            # Primero intentar mover a la derecha
-            if direccion_x > 0:
-                if self.puede_moverse(self.x + self.velocidad, self.y):
-                    self.x += self.velocidad
-                    return  # Si puede moverse a la derecha, salir
-            # Si no puede moverse a la derecha, intenta a la izquierda
-            if self.puede_moverse(self.x - self.velocidad, self.y):
-                self.x -= self.velocidad
-                return  # Si puede moverse a la izquierda, salir
-        else:  # Si la diferencia vertical es mayor que la horizontal
-            # Intentar moverse hacia abajo
-            if direccion_y > 0:
-                if self.puede_moverse(self.x, self.y + self.velocidad):
-                    self.y += self.velocidad
-                    return  # Si puede moverse hacia abajo, salir
-            # Si no puede moverse hacia abajo, intenta hacia arriba
-            if self.puede_moverse(self.x, self.y - self.velocidad):
-                self.y -= self.velocidad
-                return  # Si puede moverse hacia arriba, salir
 
-        # Si no puede moverse en la dirección preferida, intenta buscar una dirección alternativa
-        # Primero verificar si hay una dirección alternativa disponible en el eje contrario
-        if abs(direccion_x) > abs(direccion_y):  # Intentamos mover en el eje vertical si no en el horizontal
-            if self.puede_moverse(self.x, self.y + self.velocidad):  # Verificamos si puede moverse hacia abajo
-                self.y += self.velocidad
-                return
-            elif self.puede_moverse(self.x, self.y - self.velocidad):  # Verificamos si puede moverse hacia arriba
-                self.y -= self.velocidad
-                return
-        else:  # Si estaba intentando mover verticalmente, probamos horizontalmente
-            if self.puede_moverse(self.x + self.velocidad, self.y):  # Intentar a la derecha
-                self.x += self.velocidad
-                return
-            elif self.puede_moverse(self.x - self.velocidad, self.y):  # Intentar a la izquierda
-                self.x -= self.velocidad
-                return
-    """
     def crear_fantasmas():
         # Coordenadas del centro del laberinto (ajustar según tamaño del laberinto)
         centro_x = 120  # Coordenada X en el centro
@@ -114,7 +71,12 @@ class Fantasma:
 
     def draw(self):
         """Dibuja el fantasma en pantalla usando su sprite (suponiendo que están en una fila vertical)"""
-        pyxel.blt(self.x, self.y, 0, 0, self.sprite * 16, self.tamano, self.tamano, 0)
+        print(self.modo_escape)
+        if self.modo_escape ==  True:
+            pyxel.blt(self.x, self.y, 0, 24, 0, self.tamano, self.tamano, 0)
+        else:
+            pyxel.blt(self.x, self.y, 0, 0, self.sprite *16 , self.tamano, self.tamano, 0)
+
 
 
     def obtener_siguiente_posicion(self):

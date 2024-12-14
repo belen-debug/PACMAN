@@ -25,6 +25,5 @@ BOARD_START = (WIDTH,HIGH)
 BOARD_SPRITE = (0,0,8,200,200)
 
 #MODO PILDORA
-inicio_pildora = 0
-duracion_pildora = 5
+DURACION_PILDORA= 29
 

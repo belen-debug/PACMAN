@@ -1,4 +1,6 @@
 # PACMAN
+import time
+
 import pyxel
 
 
@@ -14,6 +16,7 @@ class Pacman:
         self.direccion = None  # Direccion actual del Pacman
         self.direccion_pendiente = None  # Dirección que el pacman intentará tomar
         self.puntuacion = 0  # Puntuacion acumulada
+        self.inicio_pildora = 0
         self.pildora_comida = False
         pyxel.load("assets/resources/assets.pyxres")  # Carga recursos gráficos para el pacman
 
@@ -52,6 +55,7 @@ class Pacman:
                 self.puntuacion += 50  # Aumentar el puntaje
                 # Aquí se debería empezar a ejecutar la funcion de comer fantasmas
                 self.pildora_comida = True
+                self.inicio_pildora = time.time()
 
 
 
