@@ -175,7 +175,7 @@ class Pacman:
     def draw(self):
         """Dibuja al personaje en pantalla"""
         # Se dibuja el sripe en la pantalla en las coordenadas (self.x, self.y)
-        pyxel.blt(self.x, self.y, 0, 64, 0, self.tamano, self.tamano, 0)
+        pyxel.blt(self.x, self.y, 0, 16, 0, self.tamano, self.tamano, 0)
         # Se representa en la pantalla la puntuación del jugador
         pyxel.rect(180, 240, 80, 16, 10)
         pyxel.text(184, 244, f"Puntuacion: {self.puntuacion}", 1)

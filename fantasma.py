@@ -99,7 +99,7 @@ class Fantasma:
             movimientos["down"] = fantasma_x , fantasma_y + self.velocidad
 
             # Distancia a la cual se encuentra el pacman de un fantasma habiéndose movido una casilla.
-            # La casilla a la cual se mueve el fantasma lo vamos a proabar iterando y coger la que la distnacia sea mayor
+            # La casilla a la cual se mueve el fantasma lo vamos a proabar iterando y coger la que la distancia sea mayor
             distancia_escape = 0
 
             # Le damos un valor cualquiera por defecto a la direccion de escape
@@ -147,7 +147,7 @@ class Fantasma:
         """Dibuja el fantasma en pantalla usando su sprite (suponiendo que están en una fila vertical)"""
 
         if self.modo_escape ==  True:
-            pyxel.blt(self.x, self.y, 0, 24, 0, self.tamano, self.tamano, 0)
+            pyxel.blt(self.x, self.y, 0, 16, 32, self.tamano, self.tamano, 0)
         else:
             pyxel.blt(self.x, self.y, 0, 0, self.sprite *16 , self.tamano, self.tamano, 0)
 
