@@ -23,3 +23,8 @@ CHARACTER3_SPRITE = (0, 0, 48, 8, 8)
 #B0ARD
 BOARD_START = (WIDTH,HIGH)
 BOARD_SPRITE = (0,0,8,200,200)
+
+#MODO PILDORA
+inicio_pildora = 0
+duracion_pildora = 5
+

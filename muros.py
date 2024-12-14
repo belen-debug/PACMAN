@@ -4,7 +4,7 @@ class Muros:
         self.tamano = tamano  # Tamaño de los bloques del laberinto
         self.muros = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
+            [1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
             [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1],
             [1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1],
             [1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1],
@@ -49,7 +49,7 @@ class Muros:
         for (x, y) in self.puntos:
             pyxel.circ(x, y, 2,10)  # Dibujar puntos pequeños
         for (x, y) in self.pildoras:  # Dibujar las píldoras
-            pyxel.circ(x, y, 4, 10)
+            pyxel.circ(x, y, 4, 7)
 
 
 

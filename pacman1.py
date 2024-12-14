@@ -2,7 +2,9 @@
 import pyxel
 
 
+
 class Pacman:
+
     def __init__(self, x, y, velocidad, laberinto):
         self.x = x  # Posición inicial en el eje X
         self.y = y  # Posición inicial en el eje Y
@@ -12,6 +14,7 @@ class Pacman:
         self.direccion = None  # Direccion actual del Pacman
         self.direccion_pendiente = None  # Dirección que el pacman intentará tomar
         self.puntuacion = 0  # Puntuacion acumulada
+        self.pildora_comida = False
         pyxel.load("assets/resources/assets.pyxres")  # Carga recursos gráficos para el pacman
 
     def recoge_punto(self):
@@ -27,13 +30,33 @@ class Pacman:
             distancia_cuadrada = dx ** 2 + dy ** 2
 
             # Verificar si la distancia es menor que 16 (4 píxeles)
-            if distancia_cuadrada < 16:
+            if distancia_cuadrada <= 18:
                 self.puntuacion += 10  # Incrementar la puntuación
             else:
                 puntos_restantes.append(punto)  # Si Pacman no recoge el punto, lo mantengo en la lista
 
         # Actualizamos la lista de puntos con los que no fueron recogidos
         self.laberinto.puntos = puntos_restantes
+
+    def come_pildora(self):
+
+        for pildora in self.laberinto.pildoras:
+            px, py = pildora
+            centro_x_pacman = self.x + self.tamano // 2
+            centro_y_pacman = self.y + self.tamano // 2
+            distancia_max = self.tamano // 2 + 4  # La distancia máxima
+
+            # Detectar colisión (distancia entre Pacman y la píldora)
+            if abs(centro_x_pacman - px) < distancia_max and abs(centro_y_pacman - py) < distancia_max:
+                self.laberinto.pildoras.remove(pildora)  # Eliminar el punto
+                self.puntuacion += 50  # Aumentar el puntaje
+                # Aquí se debería empezar a ejecutar la funcion de comer fantasmas
+                self.pildora_comida = True
+
+
+
+
+
 
     def teletransportar(self):
         """ Permite a pacman transportarse de un extremo a otro """
@@ -141,11 +164,12 @@ class Pacman:
             self.x, self.y = nuevo_x, nuevo_y
         # Se llama a la función self.recoge_punto() para verificar si Pacman ha recogido algún punto en la nueva posición
         self.recoge_punto()
+        self.come_pildora()
 
     def draw(self):
         """Dibuja al personaje en pantalla"""
         # Se dibuja el sripe en la pantalla en las coordenadas (self.x, self.y)
-        pyxel.blt(self.x, self.y, 0, 16, 0, self.tamano, self.tamano, 0)
+        pyxel.blt(self.x, self.y, 0, 64, 0, self.tamano, self.tamano, 0)
         # Se representa en la pantalla la puntuación del jugador
         pyxel.rect(180, 240, 80, 16, 10)
         pyxel.text(184, 244, f"Puntuacion: {self.puntuacion}", 1)
