@@ -19,7 +19,6 @@ class Fantasma:
         self.pacman = pacman
 
 
-
     def puede_moverse(self, x, y):
         """Verifica si el fantasma puede moverse a las coordenadas dadas"""
         tamano_celda = self.laberinto.tamano
@@ -67,18 +66,6 @@ class Fantasma:
         # Si puede moverse, actualizamos la posición
         if self.puede_moverse(nuevo_x, nuevo_y):
             self.x, self.y = nuevo_x, nuevo_y
-
-
-    def draw(self):
-        """Dibuja el fantasma en pantalla usando su sprite (suponiendo que están en una fila vertical)"""
-        print(self.modo_escape)
-        if self.modo_escape ==  True:
-            pyxel.blt(self.x, self.y, 0, 24, 0, self.tamano, self.tamano, 0)
-        else:
-            pyxel.blt(self.x, self.y, 0, 0, self.sprite *16 , self.tamano, self.tamano, 0)
-
-
-
     def obtener_siguiente_posicion(self):
         # Obtiene la siguiente posición, para no repetir el código
         nuevo_x, nuevo_y = self.x, self.y
@@ -156,9 +143,13 @@ class Fantasma:
             self.y += self.velocidad
 
 
+    def draw(self):
+        """Dibuja el fantasma en pantalla usando su sprite (suponiendo que están en una fila vertical)"""
 
-
-
+        if self.modo_escape ==  True:
+            pyxel.blt(self.x, self.y, 0, 24, 0, self.tamano, self.tamano, 0)
+        else:
+            pyxel.blt(self.x, self.y, 0, 0, self.sprite *16 , self.tamano, self.tamano, 0)
 
 
 

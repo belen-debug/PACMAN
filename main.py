@@ -53,11 +53,22 @@ def main():
 
     def update():
         nonlocal vidas
-
         personaje.automovimiento() #Hace que pacman se mueva solo
         personaje.update()  # Actualiza a Pacman
+
+        # Detecta si Pacman ha comido una nueva pildora
+        if personaje.nueva_pildora:
+            personaje.pildora_comida = True
+            # Reinicia el temporizador de la pildora
+            personaje.inicio_pildora = time.time()
+            # Reactiva el modo escape de los fantasmas
+            reactivar_fantasmas()
+            # Reinicia el indicador
+            personaje.nueva_pildora = False
+
         for fantasma in fantasmas:
-            """ Si es verdad que el pacman ha comido una pildora, entonces el fantasma escape del personaje"""
+            """ Si es verdad que el pacman ha comido una pildora y el fantasma no se ha muerto aún,
+             entonces el fantasma escapa del personaje"""
             if personaje.pildora_comida and fantasma not in fantasmas_muertos:
                 fantasma.escapar(personaje.x,personaje.y)
                 fantasma.modo_escape = True
@@ -66,11 +77,11 @@ def main():
                 fantasma.update()  # Movimiento normal
 
         if personaje.pildora_comida:
-            print(time.time() - personaje.inicio_pildora)
+
             if time.time() - personaje.inicio_pildora > constants.DURACION_PILDORA:
                 personaje.pildora_comida = False
                 fantasmas_muertos.clear()
-                quitar_modo_escape()4
+                quitar_modo_escape()
 
         fantasma_colisionado = detectar_colision() # Para detectar con qué fantasma ha colisionado
 
@@ -80,13 +91,11 @@ def main():
             """ Si pacman ha comido una pildora y sigue habiendo tiempo en el modo pildora
              reinicia la posición del fantasma con el que ha colisionado"""
 
-
             if personaje.pildora_comida and fantasma_colisionado not in fantasmas_muertos:
                 fantasma_colisionado.x, fantasma_colisionado.y = 110, 110
                 fantasmas_muertos.append(fantasma_colisionado)
                 fantasma_colisionado.modo_escape = False
 
-            #elif not pildora_comida:
             else:
                 vidas -= 1  # Reduce las vidas en 1
                 quitar_modo_escape()
@@ -102,10 +111,12 @@ def main():
         for fantasma in fantasmas:
             fantasma.modo_escape = False
 
-
-
-
-
+    def reactivar_fantasmas():
+        """Reactivamos a los fantasmas muertos para que vuelvan al modo escapar."""
+        fantasmas_muertos.clear()  # Limpiar la lista de fantasmas muertos
+        # Pone a todos los fantasmas en modo escapar
+        for fantasma in fantasmas:
+            fantasma.modo_escape = True
 
 
     def draw():
